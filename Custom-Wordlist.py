@@ -13,9 +13,6 @@ import subprocess
 # Output is saved to wordlist.txt
 #!/usr/bin/env python3
 
-import re
-import os
-
 def cleaning():
     regexes = [
         r".{100,}", # Ignore lines with more than 100 characters (overly specific)
