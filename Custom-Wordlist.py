@@ -8,9 +8,9 @@ import os
 import re
 import subprocess
 
-# usage: Open Burp, navigate to proxy history, ctrl-a to select all records, right click and "Save Items" as an .xml file.
-# python burplist.py burprequests.xml
-# output is saved to wordlist.txt
+# Usage: Open Burp, navigate to proxy history, ctrl-a to select all records, right click and "Save Items" as an .xml file.
+# python Custom-Wordlist.py burprequests.xml
+# Output is saved to wordlist.txt
 #!/usr/bin/env python3
 
 import re
