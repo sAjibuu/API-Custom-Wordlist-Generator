@@ -8,9 +8,9 @@ import os
 import re
 import subprocess
 
-# Usage: Open Burp, navigate to proxy history, ctrl-a to select all records, right click and "Save Items" as an .xml file.
+# usage: Open Burp, navigate to proxy history, ctrl-a to select all records, right click and "Save Items" as an .xml file.
 # python Custom-Wordlist.py burprequests.xml
-# Output is saved to wordlist.txt
+# output is saved to wordlist.txt
 #!/usr/bin/env python3
 
 def cleaning():
@@ -24,14 +24,15 @@ def cleaning():
         r"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}", # Ignore UUIDs
         r"[0-9]+[a-zA-Z]+[0-9]+[a-zA-Z]+[0-9]+", # Ignore multiple numbers and letters mixed together (likely noise)
         r"\.(png|jpg|jpeg|gif|svg|bmp|ttf|avif|wav|mp4|aac|ajax|css|all)$", # Ignore low value filetypes
-        r"^$" # Ignores blank lines
+        r"^$", # Ignores blank lines
+        r"[^a-zA-Z0-9\s]+", # Remove non-alphanumeric characters
     ]
 
     wordlist = "wordlist.txt"
     print("[+] Cleaning {}".format(wordlist))
 
     # Read input file
-    with open(wordlist, "r") as f:
+    with open(wordlist, "r", encoding="utf8") as f:
         lines = f.readlines()
 
     original_size = len(lines)
@@ -43,6 +44,9 @@ def cleaning():
     # Remove lines starting with digits
     lines = [line for line in lines if not re.search(r"^[0-9]", line)]
 
+    # Remove lines that contain only a single character
+    lines = [line for line in lines if len(line.strip()) > 1]
+
     # Sort and remove duplicates
     lines = sorted(set(lines))
 
@@ -51,7 +55,7 @@ def cleaning():
 
     # Write output file
     output_file = "{}_cleaned".format(wordlist)
-    with open(output_file, "w") as f:
+    with open(output_file, "w", encoding="utf8") as f:
         f.writelines(lines)
 
     # Calculate changes
@@ -60,10 +64,12 @@ def cleaning():
 
     print("[-] Removed {} lines".format(removed))
     print("[+] Wordlist is now {} lines".format(new_size))
-    print("[+] Done")
     print("[+] Removing old wordlist file")
+    print("[+] Done")
     os.remove("wordlist.txt")
     os.rename("wordlist.txt_cleaned", "wordlist.txt")
+
+
 
     
 def entropy(string):
@@ -85,6 +91,7 @@ tree = ET.parse(sys.argv[1])
 root = tree.getroot()
 wordlist = []
 
+print("Please wait, it might take a few minutes...")
 for i in root:
 
     # preserve subdomains, file/dir names with . - _
