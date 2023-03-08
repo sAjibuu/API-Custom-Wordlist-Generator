@@ -25,7 +25,7 @@ def cleaning():
         r"[0-9]+[a-zA-Z]+[0-9]+[a-zA-Z]+[0-9]+", # Ignore multiple numbers and letters mixed together (likely noise)
         r"\.(png|jpg|jpeg|gif|svg|bmp|ttf|avif|wav|mp4|aac|ajax|css|all)$", # Ignore low value filetypes
         r"^$", # Ignores blank lines
-        r"[^a-zA-Z0-9\s]+", # Remove non-alphanumeric characters
+        r"[^a-zA-Z0-9\s_.-]+", # Remove non-alphanumeric characters except underscore, dash and dot at the beginning of a line
     ]
 
     wordlist = "wordlist.txt"
@@ -69,9 +69,6 @@ def cleaning():
     os.remove("wordlist.txt")
     os.rename("wordlist.txt_cleaned", "wordlist.txt")
 
-
-
-    
 def entropy(string):
     #"Calculates the Shannon entropy of a string"
     # get probability of chars in string
